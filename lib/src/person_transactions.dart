@@ -97,16 +97,9 @@ class TransactionItem extends StatelessWidget {
 }
 
 class TransactionList extends StatelessWidget {
-  final List<Map<String, dynamic>> transactions = [
-    {"date": "2023-09-25", "time": "09:30 AM", "type": "give", "amount": 100},
-    {"date": "2023-09-25", "time": "02:45 PM", "type": "take", "amount": 50},
-    {"date": "2023-09-26", "time": "11:15 AM", "type": "give", "amount": 75},
-    {"date": "2023-09-26", "time": "11:15 AM", "type": "give", "amount": 75},
-    {"date": "2023-09-26", "time": "03:00 PM", "type": "take", "amount": 30},
-    {"date": "2023-09-27", "time": "10:00 AM", "type": "give", "amount": 200},
-    {"date": "2023-09-26", "time": "03:00 PM", "type": "take", "amount": 30},
-    {"date": "2023-09-27", "time": "10:00 AM", "type": "give", "amount": 200},
-  ];
+  final List<Map<String, dynamic>> transactions;
+
+  TransactionList({required this.transactions});
 
   @override
   Widget build(BuildContext context) {
@@ -117,19 +110,26 @@ class TransactionList extends StatelessWidget {
           Row(
             children: [
               Text(
-                'row Item',
+                'Date',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               Expanded(
                 child: Text(
-                  'You Gave',
+                  'Time',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
               Expanded(
                 child: Text(
-                  'You Got',
+                  'Type',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  'Amount',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
@@ -161,6 +161,29 @@ class TransactionList extends StatelessWidget {
 class PartyDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    List<Map<String, dynamic>> transactions = [
+      {"date": "2023-09-25", "time": "09:30 AM", "type": "give", "amount": 100},
+      {"date": "2023-09-25", "time": "02:45 PM", "type": "take", "amount": 50},
+      {"date": "2023-09-26", "time": "11:15 AM", "type": "give", "amount": 75},
+      {"date": "2023-09-26", "time": "11:15 AM", "type": "give", "amount": 75},
+      {"date": "2023-09-26", "time": "03:00 PM", "type": "take", "amount": 30},
+      {"date": "2023-09-27", "time": "10:00 AM", "type": "give", "amount": 200},
+      {"date": "2023-09-26", "time": "03:00 PM", "type": "take", "amount": 30},
+      {"date": "2023-09-27", "time": "10:00 AM", "type": "give", "amount": 200},
+    ];
+
+    int totalGave = 0;
+    int totalGot = 0;
+    for (var transaction in transactions) {
+      if (transaction['type'] == 'give') {
+        totalGave += transaction['amount'] as int;
+      } else {
+        totalGot += transaction['amount'] as int;
+      }
+    }
+
+    int overallTotal = totalGot - totalGave;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Party Details'),
@@ -216,10 +239,10 @@ class PartyDetailsScreen extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    'Rs 18,000',
+                    'Rs $overallTotal',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Colors.green,
+                      color: overallTotal >= 0 ? Colors.green : Colors.red,
                     ),
                   ),
                 ],
@@ -248,7 +271,7 @@ class PartyDetailsScreen extends StatelessWidget {
                 ],
               ),
             ),
-            TransactionList(),
+            TransactionList(transactions: transactions),
             Padding(
               padding: EdgeInsets.all(10),
               child: Row(

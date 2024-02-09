@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:khata_custom/src/create_person_entry.dart';
 import 'package:khata_custom/src/person_transactions.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 class VerticalLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -107,34 +110,48 @@ class UserList extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             Map<String, dynamic> user = users[index];
             return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PartyDetailsScreen()),
-                );
-
-                // Navigate to the PartyDetails screen
-              },
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: Colors.grey,
-                  child: Text(
-                    user["user"][0],
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PartyDetailsScreen()),
+                  );
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 5),
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white, // Changed to white
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 5,
+                        spreadRadius: 2,
+                      ),
+                    ],
                   ),
-                ),
-                title: Text(user["user"]),
-                subtitle: Text(user["lastUpdated"]),
-                trailing: Text(
-                  "${user["total"]}",
-                  style: TextStyle(
-                    color: user["total"] >= 0 ? Colors.green : Colors.red,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.grey,
+                      child: Text(
+                        user["user"][0],
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    title: Text(user["user"]),
+                    subtitle: Text(user["lastUpdated"]),
+                    trailing: Text(
+                      "${user["total"]}",
+                      style: TextStyle(
+                        color: user["total"] >= 0 ? Colors.green : Colors.red,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            );
+                ));
           },
         ),
       ),
@@ -148,6 +165,39 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Dashboard'),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                'Sidebar',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              title: Text('Khata'),
+              onTap: () {
+                // Handle item 1
+              },
+            ),
+            ListTile(
+              title: Text("Asset"),
+              onTap: () {
+                // Handle item 2
+              },
+            ),
+
+            // Add more list tiles for additional sidebar items
+          ],
+        ),
       ),
       body: Column(
         children: [
